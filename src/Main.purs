@@ -18,14 +18,18 @@ foreign import insertAdjacentElementImpl :: EffectFn3 Element String Element Uni
 insertAdjacentElement :: Element -> String -> Element -> Effect Unit
 insertAdjacentElement = runEffectFn3 insertAdjacentElementImpl
 
-insertDiv :: Document -> Element -> Effect Unit
-insertDiv document h3 = do
-    div <- createElement "div" document
+effectDocument :: Effect Document
+effectDocument = toDocument <$> (window >>= document)
+
+insertDiv :: Element -> Effect Unit
+insertDiv h3 = do
+    doc <- effectDocument
+    div <- createElement "div" doc
     insertAdjacentElement h3 "beforebegin" div
 
 main :: Effect Unit
 main = do
-    doc <- toDocument <$> (window >>= document)
+    doc <- effectDocument
     h3s <- getElementsByTagName "h3" doc >>= toArray
-    traverse_ (insertDiv doc) h3s 
+    traverse_ insertDiv h3s 
     logShow "hello"
