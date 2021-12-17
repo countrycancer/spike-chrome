@@ -9,6 +9,7 @@ import Effect.Console (logShow)
 import Effect.Uncurried (EffectFn3, runEffectFn3)
 import Web.DOM (Document, Element)
 import Web.DOM.Document (createElement, createTextNode, getElementsByTagName)
+import Web.DOM.Element (setAttribute)
 import Web.DOM.Element as Element
 import Web.DOM.HTMLCollection (toArray)
 import Web.DOM.Node (appendChild)
@@ -31,6 +32,7 @@ insertDiv i h3 = do
     div <- createElement "div" doc
     text <- createTextNode (show i) doc
     _ <- appendChild (Text.toNode text) (Element.toNode div)
+    _ <- setAttribute "style" "float:left;left:-5px;position:absolute;" div
     insertAdjacentElement h3 "beforebegin" div
 
 main :: Effect Unit
