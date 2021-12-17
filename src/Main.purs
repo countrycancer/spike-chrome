@@ -2,6 +2,7 @@ module Main where
 
 import Prelude
 
+import Data.Array (take)
 import Data.Lens (itraverseOf_)
 import Data.Lens.Indexed (itraversed)
 import Data.Maybe (Maybe(..), fromMaybe)
@@ -60,5 +61,5 @@ main :: Effect Unit
 main = do
     doc <- effectDocument
     h3s <- getElementsByTagName "h3" doc >>= toArray
-    itraverseOf_ itraversed insertDiv h3s
+    itraverseOf_ itraversed insertDiv $ take 9 h3s
     logShow "hello"
