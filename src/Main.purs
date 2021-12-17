@@ -20,6 +20,7 @@ insertAdjacentElement = runEffectFn3 insertAdjacentElementImpl
 
 main :: Effect Unit
 main = do
-    h3s <- window >>= document >>= toDocument >>> getElementsByTagName "h3" >>= toArray
+    document <- window >>= document >>= toDocument >>> pure
+    h3s <- getElementsByTagName "h3" document >>= toArray
     traverse_ (\h3 -> insertAdjacentElement h3 "beforebegin" h3) h3s 
     logShow "hello"
