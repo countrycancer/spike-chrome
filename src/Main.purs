@@ -6,7 +6,7 @@ import Data.Traversable (traverse_)
 import Effect (Effect)
 import Effect.Console (logShow)
 import Effect.Uncurried (EffectFn3, runEffectFn3)
-import Web.DOM (Element)
+import Web.DOM (Document, Element)
 import Web.DOM.Document (createElement, getElementsByTagName)
 import Web.DOM.HTMLCollection (toArray)
 import Web.HTML (window)
@@ -18,10 +18,14 @@ foreign import insertAdjacentElementImpl :: EffectFn3 Element String Element Uni
 insertAdjacentElement :: Element -> String -> Element -> Effect Unit
 insertAdjacentElement = runEffectFn3 insertAdjacentElementImpl
 
+insertDiv :: Document -> Element -> Effect Unit
+insertDiv document h3 = do
+    div <- createElement "div" document
+    insertAdjacentElement h3 "beforebegin" div
+
 main :: Effect Unit
 main = do
     document <- window >>= document >>= toDocument >>> pure
     h3s <- getElementsByTagName "h3" document >>= toArray
-    div <- createElement "div" document
-    traverse_ (\h3 -> insertAdjacentElement h3 "beforebegin" div) h3s 
+    traverse_ (insertDiv document) h3s 
     logShow "hello"
