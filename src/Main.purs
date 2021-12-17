@@ -25,7 +25,7 @@ insertDiv document h3 = do
 
 main :: Effect Unit
 main = do
-    document <- window >>= document >>= toDocument >>> pure
-    h3s <- getElementsByTagName "h3" document >>= toArray
-    traverse_ (insertDiv document) h3s 
+    doc <- window >>= document >>= toDocument >>> pure
+    h3s <- getElementsByTagName "h3" doc >>= toArray
+    traverse_ (insertDiv doc) h3s 
     logShow "hello"
