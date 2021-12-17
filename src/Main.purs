@@ -19,7 +19,8 @@ import Web.Event.Event (Event, EventType(..))
 import Web.Event.EventTarget (addEventListener, eventListener)
 import Web.HTML (window)
 import Web.HTML.HTMLDocument (toDocument)
-import Web.HTML.Window (document, toEventTarget)
+import Web.HTML.Location (setHref)
+import Web.HTML.Window (document, location, toEventTarget)
 import Web.UIEvent.KeyboardEvent (fromEvent, key)
 
 foreign import insertAdjacentElementImpl :: EffectFn3 Element String Element Unit
@@ -33,7 +34,11 @@ effectDocument = toDocument <$> (window >>= document)
 handle :: Int -> String -> Event -> Effect Unit
 handle i href e = case fromEvent e of
     Nothing -> pure unit
-    Just keyboardEvent -> if show i == key keyboardEvent then logShow href else pure unit
+    Just keyboardEvent -> if show i == key keyboardEvent 
+        then do
+            loc <- window >>= location
+            setHref href loc
+        else pure unit
 
 insertDiv :: Int -> Element -> Effect Unit
 insertDiv i h3 = do
