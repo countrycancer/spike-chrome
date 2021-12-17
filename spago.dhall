@@ -16,12 +16,14 @@ to generate this file without the comments in this block.
   , "console"
   , "effect"
   , "foldable-traversable"
+  , "maybe"
   , "prelude"
   , "profunctor-lenses"
   , "psci-support"
   , "web-dom"
   , "web-events"
   , "web-html"
+  , "web-uievents"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
