@@ -43,7 +43,7 @@ insertDiv i h3 = do
     _ <- appendChild (Text.toNode text) (Element.toNode div)
     _ <- setAttribute "style" "float:left;left:-5px;position:absolute;" div
     insertAdjacentElement h3 "beforebegin" div
-    maybeA <- parentNode (Element.toNode div)
+    maybeA <- parentNode (Element.toNode h3)
     href <- case maybeA >>= fromNode of
         Nothing -> pure ""
         Just element -> fromMaybe "" <$> getAttribute "href" element
