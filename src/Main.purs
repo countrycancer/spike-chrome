@@ -2,7 +2,8 @@ module Main where
 
 import Prelude
 
-import Data.Traversable (traverse_)
+import Data.Lens (itraverseOf_)
+import Data.Lens.Indexed (itraversed)
 import Effect (Effect)
 import Effect.Console (logShow)
 import Effect.Uncurried (EffectFn3, runEffectFn3)
@@ -21,8 +22,8 @@ insertAdjacentElement = runEffectFn3 insertAdjacentElementImpl
 effectDocument :: Effect Document
 effectDocument = toDocument <$> (window >>= document)
 
-insertDiv :: Element -> Effect Unit
-insertDiv h3 = do
+insertDiv :: Int -> Element -> Effect Unit
+insertDiv i h3 = do
     doc <- effectDocument
     div <- createElement "div" doc
     insertAdjacentElement h3 "beforebegin" div
@@ -31,5 +32,5 @@ main :: Effect Unit
 main = do
     doc <- effectDocument
     h3s <- getElementsByTagName "h3" doc >>= toArray
-    traverse_ insertDiv h3s 
+    itraverseOf_ itraversed insertDiv h3s
     logShow "hello"

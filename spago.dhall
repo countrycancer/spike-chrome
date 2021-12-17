@@ -17,6 +17,7 @@ to generate this file without the comments in this block.
   , "effect"
   , "foldable-traversable"
   , "prelude"
+  , "profunctor-lenses"
   , "psci-support"
   , "web-dom"
   , "web-html"
