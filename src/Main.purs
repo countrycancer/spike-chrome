@@ -33,7 +33,7 @@ effectDocument = toDocument <$> (window >>= document)
 handle :: Int -> Event -> Effect Unit
 handle i e = case fromEvent e of
     Nothing -> pure unit
-    Just keyboardEvent -> logShow $ key keyboardEvent
+    Just keyboardEvent -> if show i == key keyboardEvent then logShow i else pure unit
 
 insertDiv :: Int -> Element -> Effect Unit
 insertDiv i h3 = do
