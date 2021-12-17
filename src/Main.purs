@@ -20,7 +20,7 @@ import Web.Event.EventTarget (addEventListener, eventListener)
 import Web.HTML (window)
 import Web.HTML.HTMLDocument (toDocument)
 import Web.HTML.Window (document, toEventTarget)
-import Web.UIEvent.KeyboardEvent (fromEvent)
+import Web.UIEvent.KeyboardEvent (fromEvent, key)
 
 foreign import insertAdjacentElementImpl :: EffectFn3 Element String Element Unit
 
@@ -33,7 +33,7 @@ effectDocument = toDocument <$> (window >>= document)
 handle :: Int -> Event -> Effect Unit
 handle i e = case fromEvent e of
     Nothing -> pure unit
-    Just keyboardEvent -> logShow i
+    Just keyboardEvent -> logShow $ key keyboardEvent
 
 insertDiv :: Int -> Element -> Effect Unit
 insertDiv i h3 = do
