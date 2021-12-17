@@ -14,9 +14,11 @@ import Web.DOM.Element as Element
 import Web.DOM.HTMLCollection (toArray)
 import Web.DOM.Node (appendChild)
 import Web.DOM.Text as Text
+import Web.Event.Event (EventType(..))
+import Web.Event.EventTarget (addEventListener, eventListener)
 import Web.HTML (window)
 import Web.HTML.HTMLDocument (toDocument)
-import Web.HTML.Window (document)
+import Web.HTML.Window (document, toEventTarget)
 
 foreign import insertAdjacentElementImpl :: EffectFn3 Element String Element Unit
 
@@ -34,6 +36,9 @@ insertDiv i h3 = do
     _ <- appendChild (Text.toNode text) (Element.toNode div)
     _ <- setAttribute "style" "float:left;left:-5px;position:absolute;" div
     insertAdjacentElement h3 "beforebegin" div
+    listener <- eventListener \_ -> logShow i
+    target <- toEventTarget <$> window
+    addEventListener (EventType "keydown") listener false target
 
 main :: Effect Unit
 main = do

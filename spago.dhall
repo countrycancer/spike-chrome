@@ -20,6 +20,7 @@ to generate this file without the comments in this block.
   , "profunctor-lenses"
   , "psci-support"
   , "web-dom"
+  , "web-events"
   , "web-html"
   ]
 , packages = ./packages.dhall
