@@ -10,4 +10,5 @@
 /.spago
 
 # spike-chrome
-index.js
+/chrome/index.js
+/web/index.js
