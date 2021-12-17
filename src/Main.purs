@@ -2,14 +2,24 @@ module Main where
 
 import Prelude
 
-import Data.Array (length)
+import Data.Traversable (traverse_)
 import Effect (Effect)
 import Effect.Console (logShow)
+import Effect.Uncurried (EffectFn3, runEffectFn3)
+import Web.DOM (Element)
 import Web.DOM.Document (getElementsByTagName)
 import Web.DOM.HTMLCollection (toArray)
 import Web.HTML (window)
 import Web.HTML.HTMLDocument (toDocument)
 import Web.HTML.Window (document)
 
+foreign import insertAdjacentElementImpl :: EffectFn3 Element String Element Unit
+
+insertAdjacentElement :: Element -> String -> Element -> Effect Unit
+insertAdjacentElement = runEffectFn3 insertAdjacentElementImpl
+
 main :: Effect Unit
-main = window >>= document >>= toDocument >>> getElementsByTagName "h3" >>= toArray >>= logShow <<< length
+main = do
+    h3s <- window >>= document >>= toDocument >>> getElementsByTagName "h3" >>= toArray
+    traverse_ (\h3 -> insertAdjacentElement h3 "beforebegin" h3) h3s 
+    logShow "hello"
