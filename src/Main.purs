@@ -2,10 +2,11 @@ module Main where
 
 import Prelude
 
-import Data.Array (take)
+import Data.Array (filterA, take)
 import Data.Lens (itraverseOf_)
 import Data.Lens.Indexed (itraversed)
 import Data.Maybe (Maybe(..), fromMaybe)
+import Data.String (null)
 import Effect (Effect)
 import Effect.Console (logShow)
 import Effect.Uncurried (EffectFn3, runEffectFn3)
@@ -41,18 +42,22 @@ handle i href e = case fromEvent e of
             setHref href loc
         else pure unit
 
+effectHref :: Element -> Effect String
+effectHref h3 = do
+    maybeA <- parentNode (Element.toNode h3)
+    case maybeA >>= fromNode of
+        Nothing -> pure ""
+        Just element -> fromMaybe "" <$> getAttribute "href" element
+
 insertDiv :: Int -> Element -> Effect Unit
-insertDiv i h3 = do
+insertDiv i result = do
     doc <- effectDocument
     div <- createElement "div" doc
     text <- createTextNode (show $ i + 1) doc
     _ <- appendChild (Text.toNode text) (Element.toNode div)
     _ <- setAttribute "style" "left: -12px; position: absolute;" div
-    insertAdjacentElement h3 "beforebegin" div
-    maybeA <- parentNode (Element.toNode h3)
-    href <- case maybeA >>= fromNode of
-        Nothing -> pure ""
-        Just element -> fromMaybe "" <$> getAttribute "href" element
+    insertAdjacentElement result "beforebegin" div
+    href <- effectHref result
     listener <- eventListener $ handle (i + 1) href
     target <- toEventTarget <$> window
     addEventListener (EventType "keydown") listener false target
@@ -61,5 +66,6 @@ main :: Effect Unit
 main = do
     doc <- effectDocument
     h3s <- getElementsByTagName "h3" doc >>= toArray
-    itraverseOf_ itraversed insertDiv $ take 9 h3s
+    results <- filterA (\h3 -> null >>> not <$> (effectHref h3)) $ h3s
+    itraverseOf_ itraversed insertDiv $ take 9 results
     logShow "hello"
