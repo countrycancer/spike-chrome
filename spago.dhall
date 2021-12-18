@@ -21,6 +21,7 @@ to generate this file without the comments in this block.
   , "prelude"
   , "profunctor-lenses"
   , "psci-support"
+  , "strings"
   , "web-dom"
   , "web-events"
   , "web-html"
