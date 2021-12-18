@@ -62,10 +62,13 @@ insertDiv i result = do
     target <- toEventTarget <$> window
     addEventListener (EventType "keydown") listener false target
 
+hasHref :: Element -> Effect Boolean
+hasHref h3 = null >>> not <$> (effectHref h3)
+
 main :: Effect Unit
 main = do
     doc <- effectDocument
     h3s <- getElementsByTagName "h3" doc >>= toArray
-    results <- filterA (\h3 -> null >>> not <$> (effectHref h3)) $ h3s
+    results <- filterA hasHref $ h3s
     itraverseOf_ itraversed insertDiv $ take 9 results
     logShow "hello"
