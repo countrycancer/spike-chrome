@@ -47,7 +47,7 @@ insertDiv i h3 = do
     div <- createElement "div" doc
     text <- createTextNode (show $ i + 1) doc
     _ <- appendChild (Text.toNode text) (Element.toNode div)
-    _ <- setAttribute "style" "left:-12px;position:absolute;" div
+    _ <- setAttribute "style" "left: -12px; position: absolute;" div
     insertAdjacentElement h3 "beforebegin" div
     maybeA <- parentNode (Element.toNode h3)
     href <- case maybeA >>= fromNode of
